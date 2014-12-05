@@ -1,11 +1,15 @@
 package com.test.matthias.justparktest.webservice;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.test.matthias.justparktest.MapsActivity;
 import com.test.matthias.justparktest.R;
+import com.test.matthias.justparktest.model.QueryResponse;
 
 import connection.IDownloadListener;
 
@@ -14,10 +18,10 @@ import connection.IDownloadListener;
  */
 public class DownloadParkingListener implements IDownloadListener {
 
-    private Activity context;
+    private MapsActivity context;
     private ProgressDialog progressDialogDownload;
 
-    public DownloadParkingListener(Activity context) {
+    public DownloadParkingListener(MapsActivity context) {
         this.context = context;
     }
 
@@ -51,6 +55,11 @@ public class DownloadParkingListener implements IDownloadListener {
      */
     @Override
     public void onDownloadFinished(String result) {
+
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+        QueryResponse response = gson.fromJson(result, QueryResponse.class);
         // Close download progress dialog
         if (progressDialogDownload != null) {
             progressDialogDownload.dismiss();
@@ -58,6 +67,9 @@ public class DownloadParkingListener implements IDownloadListener {
 
         // Set back screen orientation with sensor
         unlockScreenOrientation();
+
+        // Display markers
+        context.displayMarkers(response);
     }
 
     /**

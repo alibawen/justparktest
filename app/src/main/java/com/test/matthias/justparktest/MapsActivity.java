@@ -7,6 +7,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.test.matthias.justparktest.model.Parking;
+import com.test.matthias.justparktest.model.QueryResponse;
 import com.test.matthias.justparktest.webservice.DownloadParkingListener;
 import com.test.matthias.justparktest.webservice.DownloadParkingTask;
 
@@ -16,15 +18,14 @@ import java.net.URL;
 public class MapsActivity extends ActionBarActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private final String WEB_SERVICE_URL =
-            getString(R.string.data_root_url) + getString(R.string.location_endpoint);
+    private String WEB_SERVICE_URL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
-        downloadParkings();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class MapsActivity extends ActionBarActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        downloadParkings();
     }
 
     /**
@@ -82,6 +83,17 @@ public class MapsActivity extends ActionBarActivity {
             task.execute(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Display markers according to the given QueryResponse
+     * @param response the web service response
+     */
+    public void displayMarkers(QueryResponse response) {
+        for (Parking parking : response.getParkings()) {
+            LatLng coords = new LatLng(parking.getCoords().getLat(), parking.getCoords().getLng());
+            mMap.addMarker(new MarkerOptions().position(coords).title(parking.getTitle()));
         }
     }
 }
