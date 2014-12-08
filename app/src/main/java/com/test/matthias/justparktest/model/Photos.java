@@ -7,4 +7,16 @@ public class Photos {
     private UserAdded userAdded;
     private String googleMap;
     private String googleStreetview;
+
+    public UserAdded getUserAdded() {
+        return userAdded;
+    }
+
+    public String getGoogleMap() {
+        return googleMap;
+    }
+
+    public String getGoogleStreetview() {
+        return googleStreetview;
+    }
 }

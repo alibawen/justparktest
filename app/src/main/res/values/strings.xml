@@ -7,5 +7,6 @@
     <string name="downloading_resource">Downloading resources&#8230;</string>
     <string name="data_root_url">https://api.parkatmyhouse.com</string>
     <string name="location_endpoint">/1.1/location/</string>
+    <string name="facilities_label">Facilities</string>
 
 </resources>

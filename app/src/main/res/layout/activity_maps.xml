@@ -20,11 +20,12 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.Toolbar
+                xmlns:sothree="http://schemas.android.com/apk/res-auto"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimaryDark"/>
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimaryDark"
+                android:layout_width="match_parent"/>
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
@@ -36,22 +37,7 @@
         </FrameLayout>
 
         <!-- SLIDING LAYOUT -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#eeeeee"
-            android:orientation="vertical"
-            android:clickable="true"
-            android:focusable="false">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|top"
-                android:text="Details"
-                android:textSize="16sp" />
-
-        </LinearLayout>
+        <include layout="@layout/parking_details" android:id="@+id/parking_details" />
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

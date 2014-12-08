@@ -69,7 +69,7 @@ public class DownloadParkingListener implements IDownloadListener {
         unlockScreenOrientation();
 
         // Display markers
-        context.displayMarkers(response);
+        context.onDownloadFinished(response);
     }
 
     /**

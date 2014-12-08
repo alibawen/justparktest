@@ -3,9 +3,12 @@ package com.test.matthias.justparktest;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import com.google.android.gms.internal.pa;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.test.matthias.justparktest.model.Parking;
 import com.test.matthias.justparktest.model.QueryResponse;
@@ -14,16 +17,22 @@ import com.test.matthias.justparktest.webservice.DownloadParkingTask;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
-public class MapsActivity extends ActionBarActivity {
+public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private ParkingDetailsController parkingDetailsController;
     private String WEB_SERVICE_URL;
+    private Map<Marker, Integer> markerToParkingIndex;
+    private QueryResponse response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
+        this.WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
+        this.markerToParkingIndex = new HashMap<>();
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
     }
@@ -69,6 +78,8 @@ public class MapsActivity extends ActionBarActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
+        this.parkingDetailsController = new ParkingDetailsController(this);
+        this.mMap.setOnMarkerClickListener(this);
         downloadParkings();
     }
 
@@ -87,13 +98,32 @@ public class MapsActivity extends ActionBarActivity {
     }
 
     /**
-     * Display markers according to the given QueryResponse
+     * Method called when the download is finished
      * @param response the web service response
      */
-    public void displayMarkers(QueryResponse response) {
-        for (Parking parking : response.getParkings()) {
+    public void onDownloadFinished(QueryResponse response) {
+        this.response = response;
+        // Display the markers and fill the map
+        for (int i = 0; i < response.getParkings().size(); i++) {
+            Parking parking = response.getParkings().get(i);
             LatLng coords = new LatLng(parking.getCoords().getLat(), parking.getCoords().getLng());
-            mMap.addMarker(new MarkerOptions().position(coords).title(parking.getTitle()));
+            Marker marker = mMap.addMarker(new MarkerOptions().position(coords).title(parking.getTitle()));
+            this.markerToParkingIndex.put(marker, i);
         }
+
+        // Create user marker
+        LatLng userCoords = new LatLng(response.getCoords().getLat(), response.getCoords().getLng());
+        // Marker marker = mMap.addMarker(new MarkerOptions().position(userCoords));
+        // Move the camera to the user point
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoords, 15));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        int index = markerToParkingIndex.get(marker);
+        Parking parking = response.getParkings().get(index);
+        parkingDetailsController.displayParkingInfos(parking);
+        return true;
     }
 }
