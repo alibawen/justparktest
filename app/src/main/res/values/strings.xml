@@ -3,12 +3,14 @@
 
     <string name="app_name">JustParkTest</string>
     <string name="title_activity_maps">Map</string>
-
-    <string name="downloading_resource">Downloading resources&#8230;</string>
+    <string name="downloading_resource">Downloading resources…</string>
     <string name="data_root_url">https://api.parkatmyhouse.com</string>
     <string name="location_endpoint">/1.1/location/</string>
     <string name="facilities_label">Facilities</string>
     <string name="period_separator">/</string>
     <string name="photo_placeholder">photo</string>
+    <string name="fragment_data_id">data</string>
+    <string name="server_unreachable">Sorry, the server is unreachable</string>
+    <string name="active_connection_required">This application needs an active internet connection.</string>
 
 </resources>

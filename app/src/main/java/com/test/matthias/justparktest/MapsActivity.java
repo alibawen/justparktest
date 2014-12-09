@@ -1,9 +1,10 @@
 package com.test.matthias.justparktest;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
 
-import com.google.android.gms.internal.pa;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -20,33 +21,55 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import connection.InternetChecker;
+
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private ParkingDetailsController parkingDetailsController;
     private String WEB_SERVICE_URL;
     private Map<Marker, Integer> markerToParkingIndex;
-    private QueryResponse response;
+    private MapsFragment mapsFragment;
+    private int selectedMarkerIndex = -1;
+
+    // Connection tentatives
+    private int retry = 0;
+    private final static int MAX_RETRIES = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
-        this.markerToParkingIndex = new HashMap<>();
-        setContentView(R.layout.activity_maps);
-        setUpMapIfNeeded();
+        if(InternetChecker.isNetworkAvailable(this)) {
+            this.WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
+            this.markerToParkingIndex = new HashMap<>();
+            setContentView(R.layout.activity_maps);
+            setUpMapIfNeeded();
+        } else {
+            Toast.makeText(this, getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        if(InternetChecker.isNetworkAvailable(this)) {
+            setUpMapIfNeeded();
+        } else {
+            Toast.makeText(this, getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // store the data in the fragment
+        mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
     }
 
     /**
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
+     * call {@link #setUp()} once when {@link #mMap} is not null.
      * <p/>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
@@ -66,21 +89,50 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
-                setUpMap();
+                setUp();
             }
         }
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
+     * We set up the map along with the controller and download data
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
-    private void setUpMap() {
+    private void setUp() {
         this.parkingDetailsController = new ParkingDetailsController(this);
         this.mMap.setOnMarkerClickListener(this);
-        downloadParkings();
+        boolean isCreated = createFragmentIfNeeded();
+        if (isCreated) {
+            // The fragment doesn't exist, we download the data
+            downloadParkings();
+        } else {
+            // The fragment already exists
+            QueryResponse response = mapsFragment.getResponse();
+            this.displayMarkers(response);
+            int markerIndex = mapsFragment.getSelectedMarkerIndex();
+            if (markerIndex != -1) {
+                this.updateSlidingView(markerIndex);
+            }
+        }
+    }
+
+    /**
+     * Create a fragment to store web response
+     * @return true if the fragment is created.
+     */
+    public boolean createFragmentIfNeeded() {
+        // find the retained fragment on activity restarts
+        FragmentManager fm = getFragmentManager();
+        mapsFragment = (MapsFragment) fm.findFragmentByTag(getString(R.string.fragment_data_id));
+
+        // create the fragment and data the first time
+        if (mapsFragment == null) {
+            // add the fragment
+            mapsFragment = new MapsFragment();
+            fm.beginTransaction().add(mapsFragment, getString(R.string.fragment_data_id)).commit();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -102,7 +154,20 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      * @param response the web service response
      */
     public void onDownloadFinished(QueryResponse response) {
-        this.response = response;
+        // Check if the download has worked
+        if (response != null) {
+            // load the data from the web into the fragment
+            mapsFragment.setResponse(response);
+            displayMarkers(response);
+        } else if(this.retry < MAX_RETRIES) {
+            downloadParkings();
+            this.retry++;
+        } else {
+            Toast.makeText(this, getString(R.string.server_unreachable), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void displayMarkers(QueryResponse response) {
         // Display the markers and fill the map
         for (int i = 0; i < response.getParkings().size(); i++) {
             Parking parking = response.getParkings().get(i);
@@ -122,8 +187,16 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     @Override
     public boolean onMarkerClick(Marker marker) {
         int index = markerToParkingIndex.get(marker);
+
+        // Save the index in Fragment if the Activity is destroyed
+        this.selectedMarkerIndex = index;
+        updateSlidingView(index);
+        return true;
+    }
+
+    private void updateSlidingView(int index) {
+        QueryResponse response = mapsFragment.getResponse();
         Parking parking = response.getParkings().get(index);
         parkingDetailsController.displayParkingInfos(parking);
-        return true;
     }
 }
