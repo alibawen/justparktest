@@ -1,33 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/material_deep_teal_500">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="68dp">
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/title"
-            android:layout_weight="0.60"/>
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/price"
-            android:layout_weight="0.40" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/title"/>
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ratingBar"
+                style="@style/starRatingBar"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="120dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30sp"
+                android:textColor="@color/switch_thumb_normal_material_light"
+                android:textStyle="bold"
+                android:text="Large Text"
+                android:id="@+id/price"
+                android:gravity="start" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/period"
+                android:gravity="end" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/photo_placeholder"
         android:id="@+id/photo" />
 
     <TextView

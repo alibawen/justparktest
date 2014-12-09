@@ -10,4 +10,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="starRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_stars</item>
+        <item name="android:minHeight">24px</item>
+        <item name="android:maxHeight">24px</item>
+    </style>
+
 </resources>

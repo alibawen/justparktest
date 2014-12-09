@@ -6,10 +6,10 @@ import com.test.matthias.justparktest.exception.RatingException;
  * Created by Matthias on 04/12/2014.
  */
 public class Feedback {
-    private double rating;
+    private float rating;
     private int count;
 
-    public Feedback(double rating, int count) throws RatingException {
+    public Feedback(float rating, int count) throws RatingException {
         if (rating < 0 || rating > 5) {
             throw new RatingException();
         }
@@ -17,7 +17,7 @@ public class Feedback {
         this.count = count;
     }
 
-    public double getRating() {
+    public float getRating() {
         return rating;
     }
 
