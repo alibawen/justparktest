@@ -25,11 +25,26 @@
                 android:text="@string/description_dialog"
                 android:id="@+id/title"/>
 
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ratingBar"
-                style="@style/starRatingBar"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rating_bar"
+                    style="@style/starRatingBar"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp"
+                    android:text="(count)"
+                    android:id="@+id/rating_count" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -44,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="30sp"
+                android:paddingLeft="5dp"
                 android:textColor="@color/switch_thumb_normal_material_light"
                 android:textStyle="bold"
                 android:text=""
@@ -76,17 +92,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/picture_label"
-                android:id="@+id/picture_label"
-                android:textColor="@color/material_deep_teal_500"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/photo_placeholder"
-                android:minHeight="300dp"
-                android:layout_gravity="center"
-                android:id="@+id/photo"/>
+                android:text="Category"
+                android:id="@+id/category_label"
+                android:textColor="@android:color/black"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -175,6 +183,21 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/picture_label"
+                android:id="@+id/picture_label"
+                android:textColor="@color/material_deep_teal_500"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/photo_placeholder"
+                android:minHeight="300dp"
+                android:layout_gravity="center"
+                android:id="@+id/photo"/>
         </LinearLayout>
     </ScrollView>
 

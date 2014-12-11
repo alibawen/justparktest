@@ -1,6 +1,7 @@
 package com.test.matthias.justparktest;
 
 import android.app.FragmentManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.test.matthias.justparktest.model.Parking;
 import com.test.matthias.justparktest.model.QueryResponse;
 import com.test.matthias.justparktest.webservice.DownloadParkingListener;
@@ -25,12 +27,16 @@ import connection.InternetChecker;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener {
 
+    public static final float ANCHOR_POINT_PORTRAIT = 0.35f;
+    public static final float ANCHOR_POINT_LANDSCAPE = 1f;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private ParkingDetailsController parkingDetailsController;
     private String WEB_SERVICE_URL;
     private Map<Marker, Integer> markerToParkingIndex;
     private MapsFragment mapsFragment;
     private int selectedMarkerIndex = -1;
+
+    private SlidingUpPanelLayout slidingUpPanel;
 
     // Connection tentatives
     private int retry = 0;
@@ -43,6 +49,16 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             this.WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
             this.markerToParkingIndex = new HashMap<>();
             setContentView(R.layout.activity_maps);
+
+            this.slidingUpPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                this.slidingUpPanel.setAnchorPoint(ANCHOR_POINT_LANDSCAPE);
+            } else {
+                this.slidingUpPanel.setAnchorPoint(ANCHOR_POINT_PORTRAIT);
+            }
+
+            this.slidingUpPanel.hidePanel();
+            this.slidingUpPanel.setSlidingEnabled(false);
             setUpMapIfNeeded();
         } else {
             Toast.makeText(this, getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
@@ -101,6 +117,14 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     private void setUp() {
         this.parkingDetailsController = new ParkingDetailsController(this);
         this.mMap.setOnMarkerClickListener(this);
+        this.displayParkingData();
+    }
+
+    /**
+     * Get data from fragment if it exists
+     * or download data from Web Service
+     */
+    private void displayParkingData() {
         boolean isCreated = createFragmentIfNeeded();
         if (isCreated) {
             // The fragment doesn't exist, we download the data
@@ -109,9 +133,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             // The fragment already exists
             QueryResponse response = mapsFragment.getResponse();
             this.displayMarkers(response);
-            int markerIndex = mapsFragment.getSelectedMarkerIndex();
-            if (markerIndex != -1) {
-                this.updateSlidingView(markerIndex);
+            this.selectedMarkerIndex = mapsFragment.getSelectedMarkerIndex();
+            if (this.selectedMarkerIndex != -1) {
+                this.updateSlidingView(selectedMarkerIndex);
             }
         }
     }
@@ -190,11 +214,18 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
         // Save the index in Fragment if the Activity is destroyed
         this.selectedMarkerIndex = index;
+        mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
+
         updateSlidingView(index);
         return true;
     }
 
     private void updateSlidingView(int index) {
+        // Authorize to slide
+        this.slidingUpPanel.setSlidingEnabled(true);
+        this.slidingUpPanel.showPanel();
+
+        // Set data on panel
         QueryResponse response = mapsFragment.getResponse();
         Parking parking = response.getParkings().get(index);
         parkingDetailsController.displayParkingInfos(parking);

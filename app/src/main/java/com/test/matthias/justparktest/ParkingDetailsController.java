@@ -22,6 +22,8 @@ public class ParkingDetailsController {
     private Activity context;
     private TextView titleView;
     private RatingBar ratingBar;
+    private TextView ratingCount;
+    private TextView category;
     private TextView priceView;
     private TextView periodView;
     private ImageView photoView;
@@ -46,7 +48,9 @@ public class ParkingDetailsController {
     public ParkingDetailsController(Activity context) {
         this.context = context;
         this.titleView = (TextView) context.findViewById(R.id.title);
-        this.ratingBar = (RatingBar) context.findViewById(R.id.ratingBar);
+        this.ratingBar = (RatingBar) context.findViewById(R.id.rating_bar);
+        this.ratingCount = (TextView) context.findViewById(R.id.rating_count);
+        this.category = (TextView) context.findViewById(R.id.category_label);
         this.priceView = (TextView) context.findViewById(R.id.price);
         this.periodView = (TextView) context.findViewById(R.id.period);
         this.photoView = (ImageView) context.findViewById(R.id.photo);
@@ -81,7 +85,13 @@ public class ParkingDetailsController {
 
         // Rating Bar
         this.ratingBar.setRating(parking.getFeedback().getRating());
+        // Rating count
+        this.ratingCount.setText("(" + parking.getFeedback().getCount() + ")");
 
+        // Category
+        if(parking.getCategory() != null) {
+            this.category.setText(parking.getCategory().toString());
+        }
         // TODO: Reset photo
 
         // Download photo
