@@ -76,6 +76,11 @@ public class ParkingDetailsController {
         }
     }
 
+    /**
+     * Set half opacity
+     * @param imageView the imageView which will contain the drawable
+     * @param resource the id of the drawable
+     */
     private void setTransparency(ImageView imageView, int resource) {
         Drawable drawable = context.getResources().getDrawable(resource);
         // Disable
@@ -83,6 +88,10 @@ public class ParkingDetailsController {
         imageView.setImageDrawable(drawable);
     }
 
+    /**
+     * Display parking data on the view
+     * @param parking
+     */
     public void displayParkingInfos(Parking parking) {
         // Set text
         this.titleView.setText(parking.getTitle());
@@ -114,8 +123,6 @@ public class ParkingDetailsController {
             resource.getImageView().setImageDrawable(drawable);
         }
     }
-
-
 
     /**
      * Download photo in a AsyncTask

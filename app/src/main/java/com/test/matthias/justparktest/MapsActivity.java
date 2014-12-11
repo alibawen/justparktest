@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,18 +19,21 @@ import com.test.matthias.justparktest.model.QueryResponse;
 import com.test.matthias.justparktest.webservice.DownloadParkingListener;
 import com.test.matthias.justparktest.webservice.DownloadParkingTask;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 import connection.InternetChecker;
 
-public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener, SearchView.OnQueryTextListener {
 
-    public static final float ANCHOR_POINT_PORTRAIT = 0.35f;
+    public static final float ANCHOR_POINT_PORTRAIT = 0.33f;
     public static final float ANCHOR_POINT_LANDSCAPE = 1f;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private SearchView searchView;
     private ParkingDetailsController parkingDetailsController;
     private String WEB_SERVICE_URL;
     private Map<Marker, Integer> markerToParkingIndex;
@@ -50,6 +54,13 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             this.markerToParkingIndex = new HashMap<>();
             setContentView(R.layout.activity_maps);
 
+            // Set searchView
+            this.searchView = (SearchView) findViewById(R.id.searchView);
+            this.searchView.setOnQueryTextListener(this);
+            // Set default value in search query
+            this.searchView.setQuery(this.getString(R.string.default_location), false);
+
+            // Set slidingUpPanel config
             this.slidingUpPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 this.slidingUpPanel.setAnchorPoint(ANCHOR_POINT_LANDSCAPE);
@@ -128,7 +139,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         boolean isCreated = createFragmentIfNeeded();
         if (isCreated) {
             // The fragment doesn't exist, we download the data
-            downloadParkings();
+            downloadParkings(this.getString(R.string.default_location));
         } else {
             // The fragment already exists
             QueryResponse response = mapsFragment.getResponse();
@@ -162,13 +173,17 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     /**
      * Download file from webservice
      */
-    private void downloadParkings() {
+    private void downloadParkings(String params) {
+        // Download
         DownloadParkingListener listener = new DownloadParkingListener(this);
         DownloadParkingTask task = new DownloadParkingTask(listener, this);
         try {
-            URL url = new URL(WEB_SERVICE_URL);
+            String encodedParams = URLEncoder.encode(params, "UTF-8");
+            URL url = new URL(WEB_SERVICE_URL + getString(R.string.query_params_id) + encodedParams);
             task.execute(url);
         } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
@@ -184,7 +199,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             mapsFragment.setResponse(response);
             displayMarkers(response);
         } else if(this.retry < MAX_RETRIES) {
-            downloadParkings();
+            downloadParkings(this.searchView.getQuery().toString());
             this.retry++;
         } else {
             Toast.makeText(this, getString(R.string.server_unreachable), Toast.LENGTH_LONG).show();
@@ -229,5 +244,23 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         QueryResponse response = mapsFragment.getResponse();
         Parking parking = response.getParkings().get(index);
         parkingDetailsController.displayParkingInfos(parking);
+    }
+
+    /**
+     * Check on submit searchView
+     * @param query the text submitted
+     * @return
+     */
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        this.downloadParkings(query);
+        // Remove focus (hide keyboard)
+        this.searchView.clearFocus();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
