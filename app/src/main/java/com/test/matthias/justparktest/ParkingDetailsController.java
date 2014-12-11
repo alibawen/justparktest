@@ -56,11 +56,18 @@ public class ParkingDetailsController {
         this.photoView = (ImageView) context.findViewById(R.id.photo);
 
         // Facilities
+        resetFacilities();
+    }
+
+    /**
+     * Set transparency for all facility icons
+     */
+    private void resetFacilities() {
         for(Map.Entry<Facility, FacilityResource> entry : facilityMap.entrySet()) {
             FacilityResource resource = entry.getValue();
             // Create the imageView from resource
             ImageView imageView = (ImageView) context.findViewById(resource.getImageViewId());
-            // Set grayscale to all facility icons
+            // Set transparency to all facility icons
             this.setTransparency(imageView, resource.getDrawableId());
             // Add drawable in the ImageView
             imageView.setImageDrawable(context.getResources().getDrawable(resource.getDrawableId()));
@@ -98,6 +105,7 @@ public class ParkingDetailsController {
         downloadPhoto(parking);
 
         // Set default image (remove transparency) on active facilities.
+        resetFacilities();
         for(Facility facility : parking.getFacilities()) {
             FacilityResource resource = facilityMap.get(facility);
             Drawable drawable = context.getResources().getDrawable(resource.getDrawableId());
@@ -106,6 +114,8 @@ public class ParkingDetailsController {
             resource.getImageView().setImageDrawable(drawable);
         }
     }
+
+
 
     /**
      * Download photo in a AsyncTask
