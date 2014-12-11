@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:panelHeight="68dp"
+        sothree:panelHeight="@dimen/sliding_panel"
         sothree:shadowHeight="4dp">
 
         <!-- MAIN CONTENT -->

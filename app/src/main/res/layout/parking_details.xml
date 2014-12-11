@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_deep_teal_500">
+    android:background="@color/switch_thumb_normal_material_light">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="68dp">
+        android:layout_height="@dimen/sliding_panel"
+        android:background="@color/material_deep_teal_500"
+        android:padding="@dimen/abc_action_bar_default_padding_material">
 
         <LinearLayout
             android:orientation="vertical"
@@ -19,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
+                android:text="@string/description_dialog"
                 android:id="@+id/title"/>
 
             <RatingBar
@@ -34,7 +37,7 @@
             android:orientation="vertical"
             android:layout_width="120dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0" >
+            android:layout_weight="0">
 
             <TextView
                 android:layout_width="match_parent"
@@ -43,32 +46,136 @@
                 android:textSize="30sp"
                 android:textColor="@color/switch_thumb_normal_material_light"
                 android:textStyle="bold"
-                android:text="Large Text"
+                android:text=""
                 android:id="@+id/price"
-                android:gravity="start" />
+                android:gravity="start"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
+                android:text=""
                 android:id="@+id/period"
-                android:gravity="end" />
+                android:gravity="end"/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/photo_placeholder"
-        android:id="@+id/photo" />
+        android:id="@+id/scrollView" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/facilities_label"
-        android:id="@+id/facilities_label" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:padding="@dimen/abc_action_bar_default_padding_material">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/picture_label"
+                android:id="@+id/picture_label"
+                android:textColor="@color/material_deep_teal_500"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/photo_placeholder"
+                android:minHeight="300dp"
+                android:layout_gravity="center"
+                android:id="@+id/photo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/facilities_label"
+                android:id="@+id/facilities_label"
+                android:textColor="@color/material_deep_teal_500"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/full_access"
+                        android:src="@drawable/full_access"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lighting"
+                        android:src="@drawable/lighting"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/shelter"
+                        android:src="@drawable/shelter"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/gate"
+                        android:src="@drawable/gate"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/guard"
+                        android:src="@drawable/guard"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cctv"
+                        android:src="@drawable/cctv"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/key"
+                        android:src="@drawable/key"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/wc"
+                        android:src="@drawable/wc"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/car_wash"
+                        android:src="@drawable/car_wash"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/underground"
+                        android:src="@drawable/underground"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

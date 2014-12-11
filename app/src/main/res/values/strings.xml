@@ -12,5 +12,7 @@
     <string name="fragment_data_id">data</string>
     <string name="server_unreachable">Sorry, the server is unreachable</string>
     <string name="active_connection_required">This application needs an active internet connection.</string>
+    <string name="description_dialog">Click on a marker to view details...</string>
+    <string name="picture_label">Picture</string>
 
 </resources>
