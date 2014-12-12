@@ -173,7 +173,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     }
 
     /**
-     * Download file from webservice
+     * Download file from webservice asynchronously
+     * Calls onDownloadFinished when finished
      */
     private void downloadParkings(String params) {
         // Download
@@ -192,7 +193,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
     /**
      * Method called when the download is finished
-     * @param response the web service response
+     * @param response of the web service
      */
     public void onDownloadFinished(QueryResponse response) {
         // Check if the download has worked
@@ -208,6 +209,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         }
     }
 
+    /**
+     * Display the markers on map according to the web service response
+     * @param response of the web service
+     */
     private void displayMarkers(QueryResponse response) {
         // Display the markers and fill the map
         for (int i = 0; i < response.getParkings().size(); i++) {
@@ -227,6 +232,14 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
     }
 
+    /**
+     * Return a colored marker icon depending of the availability and the instant booking
+     * Green : isAvailable() && isInstantBookings()
+     * Orange : isAvailable() && !isInstantBookings()
+     * Red : !isAvailable() && !isInstantBookings()
+     * @param parking
+     * @return the BitmapDescriptor icon
+     */
     private BitmapDescriptor getMarkerIcon(Parking parking) {
         // Parking and bookings available
         if (parking.isAvailable() && parking.isInstantBookings()) {
@@ -240,6 +253,13 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         }
     }
 
+    /**
+     * Marker onClick event
+     * Save the index of the current marker in the Fragment
+     * Update the sliding view with the details
+     * @param marker
+     * @return
+     */
     @Override
     public boolean onMarkerClick(Marker marker) {
         int index = markerToParkingIndex.get(marker);
@@ -252,6 +272,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         return false; // false: Let the default behaviour occur on the map (info, center)
     }
 
+    /**
+     * Display the marker info on the sliding panel
+     * @param index of the marker
+     */
     private void updateSlidingView(int index) {
         // Authorize to slide
         this.slidingUpPanel.setSlidingEnabled(true);
