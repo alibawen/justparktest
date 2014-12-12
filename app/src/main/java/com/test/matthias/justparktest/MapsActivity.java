@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -211,7 +213,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         for (int i = 0; i < response.getParkings().size(); i++) {
             Parking parking = response.getParkings().get(i);
             LatLng coords = new LatLng(parking.getCoords().getLat(), parking.getCoords().getLng());
-            Marker marker = mMap.addMarker(new MarkerOptions().position(coords).title(parking.getTitle()));
+            BitmapDescriptor bitmap = getMarkerIcon(parking);
+            Marker marker = mMap.addMarker(
+                    new MarkerOptions().position(coords).title(parking.getTitle()).icon(bitmap));
             this.markerToParkingIndex.put(marker, i);
         }
 
@@ -223,6 +227,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
     }
 
+    private BitmapDescriptor getMarkerIcon(Parking parking) {
+        // Parking and bookings available
+        if (parking.isAvailable() && parking.isInstantBookings()) {
+            return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+        } else if (parking.isAvailable()) {
+            // Parking available only
+            return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+        } else {
+            // Nothing available
+            return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+        }
+    }
+
     @Override
     public boolean onMarkerClick(Marker marker) {
         int index = markerToParkingIndex.get(marker);
@@ -232,7 +249,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
 
         updateSlidingView(index);
-        return true;
+        return false; // false: Let the default behaviour occur on the map (info, center)
     }
 
     private void updateSlidingView(int index) {
