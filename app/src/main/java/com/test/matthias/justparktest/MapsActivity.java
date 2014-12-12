@@ -294,10 +294,22 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      */
     @Override
     public boolean onQueryTextSubmit(String query) {
+        // Clear the google maps
+        resetMap();
+        // Download new data from query
         this.downloadParkings(query);
         // Remove focus (hide keyboard)
         this.searchView.clearFocus();
         return true;
+    }
+
+    /**
+     * Reset the Google Maps and data
+     */
+    private void resetMap() {
+        this.mMap.clear();
+        this.selectedMarkerIndex = -1;
+        this.markerToParkingIndex.clear();
     }
 
     @Override
