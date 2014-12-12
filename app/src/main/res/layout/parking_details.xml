@@ -10,12 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/sliding_panel"
         android:background="@color/material_deep_teal_500"
-        android:padding="@dimen/abc_action_bar_default_padding_material">
+        android:padding="4dp">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1" >
 
             <TextView
@@ -28,12 +29,13 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
 
                 <RatingBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/rating_bar"
+                    android:isIndicator="true"
                     style="@style/starRatingBar"/>
 
                 <TextView
@@ -51,7 +53,8 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="120dp"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="0">
 
             <TextView
@@ -86,7 +89,7 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:padding="@dimen/abc_action_bar_default_padding_material">
+            android:padding="4dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -195,8 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/photo_placeholder"
-                android:minHeight="300dp"
-                android:layout_gravity="center"
+                android:layout_gravity="top|center_horizontal"
                 android:id="@+id/photo"/>
         </LinearLayout>
     </ScrollView>
