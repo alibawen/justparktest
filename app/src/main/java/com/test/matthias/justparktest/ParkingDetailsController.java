@@ -43,6 +43,7 @@ public class ParkingDetailsController {
         facilityMap.put(Facility.WC, new FacilityResource(R.id.wc, R.drawable.wc));
         facilityMap.put(Facility.CAR_WASH_AVAILABLE, new FacilityResource(R.id.car_wash, R.drawable.car_wash));
         facilityMap.put(Facility.UNDERGROUND_PARKING, new FacilityResource(R.id.underground, R.drawable.underground));
+        facilityMap.put(Facility.ARRANGED_TRANSFERTS, new FacilityResource(R.id.arranged_transfer, R.drawable.transfer));
     }
 
     public ParkingDetailsController(Activity context) {
@@ -117,10 +118,12 @@ public class ParkingDetailsController {
         resetFacilities();
         for(Facility facility : parking.getFacilities()) {
             FacilityResource resource = facilityMap.get(facility);
-            Drawable drawable = context.getResources().getDrawable(resource.getDrawableId());
-            // Enable
-            drawable.setAlpha(255);
-            resource.getImageView().setImageDrawable(drawable);
+            if (resource != null) {
+                Drawable drawable = context.getResources().getDrawable(resource.getDrawableId());
+                // Enable
+                drawable.setAlpha(255);
+                resource.getImageView().setImageDrawable(drawable);
+            }
         }
     }
 

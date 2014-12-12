@@ -25,7 +25,9 @@ public enum Facility {
     @SerializedName("Car wash available")
     CAR_WASH_AVAILABLE ("Car wash available"),
     @SerializedName("Lighting")
-    LIGHTING ("Lighting");
+    LIGHTING ("Lighting"),
+    @SerializedName("Arranged transfers")
+    ARRANGED_TRANSFERTS("Arranged transfers");
 
     private String name = "";
 
