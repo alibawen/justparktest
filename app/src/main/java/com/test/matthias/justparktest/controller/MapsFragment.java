@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest;
+package com.test.matthias.justparktest.controller;
 
 import android.os.Bundle;
 import android.app.Fragment;

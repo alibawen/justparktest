@@ -7,7 +7,7 @@ import android.content.res.Configuration;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.test.matthias.justparktest.MapsActivity;
+import com.test.matthias.justparktest.controller.MapsActivity;
 import com.test.matthias.justparktest.R;
 import com.test.matthias.justparktest.model.QueryResponse;
 

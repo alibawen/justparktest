@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest;
+package com.test.matthias.justparktest.controller;
 
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.test.matthias.justparktest.R;
 import com.test.matthias.justparktest.display.DeviceDisplay;
 import com.test.matthias.justparktest.model.Parking;
 import com.test.matthias.justparktest.model.QueryResponse;

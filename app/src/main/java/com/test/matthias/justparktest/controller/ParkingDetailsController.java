@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest;
+package com.test.matthias.justparktest.controller;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.test.matthias.justparktest.R;
 import com.test.matthias.justparktest.model.Facility;
 import com.test.matthias.justparktest.model.FacilityResource;
 import com.test.matthias.justparktest.model.Parking;
