@@ -245,7 +245,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
         // Create user marker
         LatLng userCoords = new LatLng(response.getCoords().getLat(), response.getCoords().getLng());
-        // Marker marker = mMap.addMarker(new MarkerOptions().position(userCoords));
+        mMap.addMarker(new MarkerOptions().position(userCoords)
+                .title(getString(R.string.marker_title_you))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker)));
+        
         // Move the camera to the user point
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoords, 15));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
@@ -283,14 +286,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      */
     @Override
     public boolean onMarkerClick(Marker marker) {
-        int index = markerToParkingIndex.get(marker);
+        // Check if the a parking is clicked
+        if (!marker.getTitle().equals(getString(R.string.marker_title_you))) {
+            int index = markerToParkingIndex.get(marker);
 
-        // Save the index in Fragment if the Activity is destroyed
-        this.selectedMarkerIndex = index;
-        mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
+            // Save the index in Fragment if the Activity is destroyed
+            this.selectedMarkerIndex = index;
+            mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
 
-        updateSlidingView(index);
-        return false; // false: Let the default behaviour occur on the map (info, center)
+            updateSlidingView(index);
+            return false; // false: Let the default behaviour occur on the map (info, center)
+        } else {
+            return true; // Do nothing
+        }
     }
 
     /**
