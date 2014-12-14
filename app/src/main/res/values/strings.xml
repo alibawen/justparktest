@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">JustParkTest</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">FindPark</string>
+    <string name="title_activity_maps">FindPark</string>
     <string name="downloading_resource">Downloading resources…</string>
     <string name="data_root_url">https://api.parkatmyhouse.com</string>
     <string name="location_endpoint">/1.1/location/</string>
