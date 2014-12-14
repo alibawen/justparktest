@@ -38,6 +38,16 @@
                 android:queryHint="@string/search_placeholder"
                 android:focusable="false"
                 android:background="@color/material_blue_grey_800"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/navigation_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_icon="@drawable/ic_navigation_white_36dp"
+                app:fab_colorNormal="@color/material_deep_teal_500"
+                app:fab_colorPressed="@color/material_deep_teal_200"
+                android:layout_gravity="bottom|end"
+                android:visibility="invisible"/>
 <!--
             <android.support.v7.widget.Toolbar
                 xmlns:app="http://schemas.android.com/apk/res-auto"

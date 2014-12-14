@@ -10,6 +10,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.matthias.findpark.R;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -144,9 +145,19 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         this.mMap.setOnMarkerClickListener(this);
         // Prevent compass to overlap the search view
         this.searchView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        this.resetGoogleMapsUIPadding();
+        this.displayParkingData();
+    }
+
+    /**
+     * Reset the Google Maps GUI padding, prevent compass to overlap search bar
+     * Use this.searchView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+     * before calling this function
+     *
+     */
+    private void resetGoogleMapsUIPadding() {
         int paddingTop = this.searchView.getMeasuredHeight() + 10;
         this.mMap.setPadding(0, paddingTop, 0, 0);
-        this.displayParkingData();
     }
 
     /**
@@ -294,7 +305,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             this.selectedMarkerIndex = index;
             mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
 
-            updateSlidingView(index);
+            this.updateNavigationButton(index);
+            this.updateSlidingView(index);
             return false; // false: Let the default behaviour occur on the map (info, center)
         } else {
             return true; // Do nothing
@@ -307,7 +319,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      * @param index of the marker
      */
     private void updateSlidingView(int index) {
-        // Authorize to slide
+        // Authorize to slide and show panel
         this.slidingUpPanel.setSlidingEnabled(true);
         this.slidingUpPanel.showPanel();
 
@@ -315,6 +327,25 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         QueryResponse response = mapsFragment.getResponse();
         Parking parking = response.getParkings().get(index);
         parkingDetailsController.displayParkingInfos(parking);
+    }
+
+    private void updateNavigationButton(int index) {
+        // Set the icon visible
+        FloatingActionButton fab = (FloatingActionButton) this.findViewById(R.id.navigation_button);
+        fab.setVisibility(View.VISIBLE);
+
+        // Push Google map GUI
+        int paddingTop = this.searchView.getMeasuredHeight() + 10;
+        this.mMap.setPadding(0, paddingTop, 0, 100);
+
+        QueryResponse response = mapsFragment.getResponse();
+        Parking parking = response.getParkings().get(index);
+
+        // Create navigation intent on click
+        LatLng current = new LatLng(response.getCoords().getLat(), response.getCoords().getLng());
+        LatLng target = new LatLng(parking.getCoords().getLat(), parking.getCoords().getLng());
+        NavigationIntent navigationIntent = new NavigationIntent(this, current, target);
+        fab.setOnClickListener(navigationIntent);
     }
 
     /**
@@ -325,12 +356,12 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      */
     @Override
     public boolean onQueryTextSubmit(String query) {
+        // Remove focus (hide keyboard)
+        this.searchView.clearFocus();
         // Clear the google maps
         resetMap();
         // Download new data from query
         this.downloadParkings(query);
-        // Remove focus (hide keyboard)
-        this.searchView.clearFocus();
         return true;
     }
 
@@ -341,6 +372,12 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         this.mMap.clear();
         this.selectedMarkerIndex = -1;
         this.markerToParkingIndex.clear();
+        this.slidingUpPanel.setSlidingEnabled(false);
+        this.resetGoogleMapsUIPadding();
+
+        // Hide Navigation button
+        FloatingActionButton fab = (FloatingActionButton) this.findViewById(R.id.navigation_button);
+        fab.setVisibility(View.INVISIBLE);
     }
 
     @Override
