@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.test.matthias.justparktest.R;
+import com.android.matthias.findpark.R;
 import com.android.matthias.findpark.model.Facility;
 import com.android.matthias.findpark.model.FacilityResource;
 import com.android.matthias.findpark.model.Parking;

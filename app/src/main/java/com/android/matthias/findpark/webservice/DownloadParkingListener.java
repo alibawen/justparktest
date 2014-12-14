@@ -4,11 +4,11 @@ import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 
+import com.android.matthias.findpark.R;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.android.matthias.findpark.controller.MapsActivity;
-import com.test.matthias.justparktest.R;
 import com.android.matthias.findpark.model.QueryResponse;
 
 import connection.IDownloadListener;

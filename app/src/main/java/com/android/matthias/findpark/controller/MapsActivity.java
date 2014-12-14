@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.android.matthias.findpark.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -18,7 +19,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.test.matthias.justparktest.R;
 import com.android.matthias.findpark.display.DeviceDisplay;
 import com.android.matthias.findpark.model.Parking;
 import com.android.matthias.findpark.model.QueryResponse;
