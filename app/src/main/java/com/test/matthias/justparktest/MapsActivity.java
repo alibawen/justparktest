@@ -4,6 +4,8 @@ import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.test.matthias.justparktest.display.DeviceDisplay;
 import com.test.matthias.justparktest.model.Parking;
 import com.test.matthias.justparktest.model.QueryResponse;
 import com.test.matthias.justparktest.webservice.DownloadParkingListener;
@@ -32,8 +35,8 @@ import connection.InternetChecker;
 
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener, SearchView.OnQueryTextListener {
 
-    public static final float ANCHOR_POINT_PORTRAIT = 0.33f;
-    public static final float ANCHOR_POINT_LANDSCAPE = 1f;
+    public static float ANCHOR_POINT_PORTRAIT_PX; // in px, stops before showing pictures panel
+    public static final float ANCHOR_POINT_LANDSCAPE = 1f; // screen ratio
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private SearchView searchView;
     private ParkingDetailsController parkingDetailsController;
@@ -44,14 +47,14 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
     private SlidingUpPanelLayout slidingUpPanel;
 
-    // Connection tentatives
+    // Connection attempts
     private int retry = 0;
     private final static int MAX_RETRIES = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(InternetChecker.isNetworkAvailable(this)) {
+        if (InternetChecker.isNetworkAvailable(this)) {
             this.WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
             this.markerToParkingIndex = new HashMap<>();
             setContentView(R.layout.activity_maps);
@@ -62,16 +65,24 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             // Set default value in search query
             this.searchView.setQuery(this.getString(R.string.default_location), false);
 
+            // Get anchor point from views
+            LinearLayout shownLayout = (LinearLayout) this.findViewById(R.id.anchor_layout);
+            shownLayout.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            ANCHOR_POINT_PORTRAIT_PX = shownLayout.getMeasuredHeight();
+
             // Set slidingUpPanel config
             this.slidingUpPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 this.slidingUpPanel.setAnchorPoint(ANCHOR_POINT_LANDSCAPE);
             } else {
-                this.slidingUpPanel.setAnchorPoint(ANCHOR_POINT_PORTRAIT);
+                float anchorPoint = DeviceDisplay.heightPixelsToRatio(this, ANCHOR_POINT_PORTRAIT_PX);
+                this.slidingUpPanel.setAnchorPoint(anchorPoint);
             }
 
             this.slidingUpPanel.hidePanel();
             this.slidingUpPanel.setSlidingEnabled(false);
+
+            // Set map
             setUpMapIfNeeded();
         } else {
             Toast.makeText(this, getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
@@ -81,7 +92,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     @Override
     protected void onResume() {
         super.onResume();
-        if(InternetChecker.isNetworkAvailable(this)) {
+        if (InternetChecker.isNetworkAvailable(this)) {
             setUpMapIfNeeded();
         } else {
             Toast.makeText(this, getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
@@ -130,6 +141,10 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     private void setUp() {
         this.parkingDetailsController = new ParkingDetailsController(this);
         this.mMap.setOnMarkerClickListener(this);
+        // Prevent compass to overlap the search view
+        this.searchView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int paddingTop = this.searchView.getMeasuredHeight() + 10;
+        this.mMap.setPadding(0, paddingTop, 0, 0);
         this.displayParkingData();
     }
 
@@ -155,6 +170,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
     /**
      * Create a fragment to store web response
+     *
      * @return true if the fragment is created.
      */
     public boolean createFragmentIfNeeded() {
@@ -193,6 +209,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
     /**
      * Method called when the download is finished
+     *
      * @param response of the web service
      */
     public void onDownloadFinished(QueryResponse response) {
@@ -201,7 +218,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             // load the data from the web into the fragment
             mapsFragment.setResponse(response);
             displayMarkers(response);
-        } else if(this.retry < MAX_RETRIES) {
+        } else if (this.retry < MAX_RETRIES) {
             downloadParkings(this.searchView.getQuery().toString());
             this.retry++;
         } else {
@@ -211,6 +228,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
     /**
      * Display the markers on map according to the web service response
+     *
      * @param response of the web service
      */
     private void displayMarkers(QueryResponse response) {
@@ -237,6 +255,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      * Green : isAvailable() && isInstantBookings()
      * Orange : isAvailable() && !isInstantBookings()
      * Red : !isAvailable() && !isInstantBookings()
+     *
      * @param parking
      * @return the BitmapDescriptor icon
      */
@@ -257,6 +276,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      * Marker onClick event
      * Save the index of the current marker in the Fragment
      * Update the sliding view with the details
+     *
      * @param marker
      * @return
      */
@@ -274,6 +294,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
     /**
      * Display the marker info on the sliding panel
+     *
      * @param index of the marker
      */
     private void updateSlidingView(int index) {
@@ -289,6 +310,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
     /**
      * Check on submit searchView
+     *
      * @param query the text submitted
      * @return
      */

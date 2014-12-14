@@ -5,13 +5,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:panelHeight="@dimen/sliding_panel"
-        sothree:shadowHeight="4dp">
+        app:panelHeight="@dimen/sliding_panel"
+        app:shadowHeight="4dp"
+        app:paralaxOffset="190dp">
 
         <!-- MAIN CONTENT -->
         <FrameLayout

@@ -12,9 +12,9 @@
     <string name="fragment_data_id">data</string>
     <string name="server_unreachable">Sorry, the server is unreachable</string>
     <string name="active_connection_required">This application needs an active internet connection.</string>
-    <string name="description_dialog">Click on a marker to view details...</string>
+    <string name="description_dialog">Click on a marker to view details&#8230;</string>
     <string name="picture_label">Picture</string>
-    <string name="search_placeholder">Search a location...</string>
+    <string name="search_placeholder">Search for a location&#8230;</string>
     <string name="query_params_id">\?q=</string>
     <string name="default_location">wembley</string>
 
