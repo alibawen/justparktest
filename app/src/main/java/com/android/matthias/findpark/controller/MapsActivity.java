@@ -1,12 +1,15 @@
 package com.android.matthias.findpark.controller;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.matthias.findpark.R;
@@ -175,6 +178,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             this.displayMarkers(response);
             this.selectedMarkerIndex = mapsFragment.getSelectedMarkerIndex();
             if (this.selectedMarkerIndex != -1) {
+                this.updateNavigationButton(selectedMarkerIndex);
                 this.updateSlidingView(selectedMarkerIndex);
             }
         }
@@ -336,7 +340,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
 
         // Push Google map GUI
         int paddingTop = this.searchView.getMeasuredHeight() + 10;
-        this.mMap.setPadding(0, paddingTop, 0, 100);
+        this.mMap.setPadding(0, paddingTop, 0, 110);
 
         QueryResponse response = mapsFragment.getResponse();
         Parking parking = response.getParkings().get(index);
@@ -372,12 +376,26 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         this.mMap.clear();
         this.selectedMarkerIndex = -1;
         this.markerToParkingIndex.clear();
-        this.slidingUpPanel.setSlidingEnabled(false);
+        this.resetSlidingPanelInfo();
         this.resetGoogleMapsUIPadding();
 
         // Hide Navigation button
         FloatingActionButton fab = (FloatingActionButton) this.findViewById(R.id.navigation_button);
         fab.setVisibility(View.INVISIBLE);
+    }
+
+    private void resetSlidingPanelInfo() {
+        this.slidingUpPanel.setSlidingEnabled(false);
+        TextView title = (TextView) this.findViewById(R.id.title);
+        title.setText(R.string.description_dialog);
+        RatingBar ratingBar = (RatingBar) this.findViewById(R.id.rating_bar);
+        ratingBar.setRating(0);
+        TextView ratingCount = (TextView) this.findViewById(R.id.rating_count);
+        ratingCount.setText(R.string.rating_text);
+        TextView price = (TextView) this.findViewById(R.id.price);
+        price.setText("");
+        TextView period = (TextView) this.findViewById(R.id.period);
+        period.setText("");
     }
 
     @Override

@@ -44,7 +44,7 @@
                     android:paddingLeft="5dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="12sp"
-                    android:text="(count)"
+                    android:text="@string/rating_text"
                     android:id="@+id/rating_count" />
             </LinearLayout>
 

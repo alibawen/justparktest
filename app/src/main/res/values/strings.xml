@@ -19,5 +19,6 @@
     <string name="default_location">wembley</string>
     <string name="marker_title_you">You</string>
     <string name="google_maps_intent">http://maps.google.com/maps</string>
+    <string name="rating_text">(0)</string>
 
 </resources>
