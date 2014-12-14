@@ -1,6 +1,6 @@
-package com.test.matthias.justparktest.model;
+package com.android.matthias.findpark.model;
 
-import com.test.matthias.justparktest.exception.RatingException;
+import com.android.matthias.findpark.exception.RatingException;
 
 /**
  * Created by Matthias on 04/12/2014.

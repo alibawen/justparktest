@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.model;
+package com.android.matthias.findpark.model;
 
 import com.google.gson.annotations.SerializedName;
 

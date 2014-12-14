@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.controller;
+package com.android.matthias.findpark.controller;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -7,10 +7,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.test.matthias.justparktest.R;
-import com.test.matthias.justparktest.model.Facility;
-import com.test.matthias.justparktest.model.FacilityResource;
-import com.test.matthias.justparktest.model.Parking;
-import com.test.matthias.justparktest.webservice.DownloadImageTask;
+import com.android.matthias.findpark.model.Facility;
+import com.android.matthias.findpark.model.FacilityResource;
+import com.android.matthias.findpark.model.Parking;
+import com.android.matthias.findpark.webservice.DownloadImageTask;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,9 +1,9 @@
-package com.test.matthias.justparktest.controller;
+package com.android.matthias.findpark.controller;
 
 import android.os.Bundle;
 import android.app.Fragment;
 
-import com.test.matthias.justparktest.model.QueryResponse;
+import com.android.matthias.findpark.model.QueryResponse;
 
 
 /**

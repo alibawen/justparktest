@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.webservice;
+package com.android.matthias.findpark.webservice;
 
 import android.content.Context;
 

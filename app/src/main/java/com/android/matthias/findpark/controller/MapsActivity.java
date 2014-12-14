@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.controller;
+package com.android.matthias.findpark.controller;
 
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -19,11 +19,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.test.matthias.justparktest.R;
-import com.test.matthias.justparktest.display.DeviceDisplay;
-import com.test.matthias.justparktest.model.Parking;
-import com.test.matthias.justparktest.model.QueryResponse;
-import com.test.matthias.justparktest.webservice.DownloadParkingListener;
-import com.test.matthias.justparktest.webservice.DownloadParkingTask;
+import com.android.matthias.findpark.display.DeviceDisplay;
+import com.android.matthias.findpark.model.Parking;
+import com.android.matthias.findpark.model.QueryResponse;
+import com.android.matthias.findpark.webservice.DownloadParkingListener;
+import com.android.matthias.findpark.webservice.DownloadParkingTask;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;

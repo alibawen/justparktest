@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.model;
+package com.android.matthias.findpark.model;
 
 /**
  * Created by Matthias on 05/12/2014.

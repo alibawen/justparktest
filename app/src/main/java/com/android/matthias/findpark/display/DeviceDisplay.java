@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.display;
+package com.android.matthias.findpark.display;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

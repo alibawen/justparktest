@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.exception;
+package com.android.matthias.findpark.exception;
 
 /**
  * Created by Matthias on 04/12/2014.

@@ -1,4 +1,4 @@
-package com.test.matthias.justparktest.webservice;
+package com.android.matthias.findpark.webservice;
 
 import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
@@ -7,9 +7,9 @@ import android.content.res.Configuration;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.test.matthias.justparktest.controller.MapsActivity;
+import com.android.matthias.findpark.controller.MapsActivity;
 import com.test.matthias.justparktest.R;
-import com.test.matthias.justparktest.model.QueryResponse;
+import com.android.matthias.findpark.model.QueryResponse;
 
 import connection.IDownloadListener;
 
