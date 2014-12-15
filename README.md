@@ -1,13 +1,7 @@
 FindPark
 ========
 
-![Demo](screenshots/main_view.png)
-![Demo](screenshots/marker_selected.png)
-![Demo](screenshots/navigation_selected.png)
-![Demo](screenshots/navigation_intent.png)
-![Demo](screenshots/sliding_anchor.png)
-![Demo](screenshots/sliding_extended.png)
-![Demo](screenshots/search.png)
+![Screenshots](screenshots/screenshots.png)
 
 Features
 ========
