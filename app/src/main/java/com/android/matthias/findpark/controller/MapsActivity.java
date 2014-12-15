@@ -1,6 +1,5 @@
 package com.android.matthias.findpark.controller;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -62,7 +61,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         if (InternetChecker.isNetworkAvailable(this)) {
             this.WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
             this.markerToParkingIndex = new HashMap<>();
-            setContentView(R.layout.activity_maps);
+            this.setContentView(R.layout.activity_maps);
 
             // Set searchView
             this.searchView = (SearchView) findViewById(R.id.searchView);
@@ -88,7 +87,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             this.slidingUpPanel.setSlidingEnabled(false);
 
             // Set map
-            setUpMapIfNeeded();
+            this.setUpMapIfNeeded();
         } else {
             Toast.makeText(this, getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
         }
@@ -98,7 +97,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     protected void onResume() {
         super.onResume();
         if (InternetChecker.isNetworkAvailable(this)) {
-            setUpMapIfNeeded();
+            this.setUpMapIfNeeded();
         } else {
             Toast.makeText(this, getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
         }
@@ -108,7 +107,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     public void onDestroy() {
         super.onDestroy();
         // store the data in the fragment
-        mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
+        this.mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
     }
 
     /**
@@ -117,8 +116,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      */
     @Override
     public void onBackPressed() {
-        if (slidingUpPanel != null && slidingUpPanel.isPanelExpanded() || slidingUpPanel.isPanelAnchored()) {
-            slidingUpPanel.collapsePanel();
+        if (this.slidingUpPanel != null &&
+                (this.slidingUpPanel.isPanelExpanded() || this.slidingUpPanel.isPanelAnchored())) {
+            this.slidingUpPanel.collapsePanel();
         } else {
             super.onBackPressed();
         }
@@ -141,12 +141,12 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      */
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
+        if (this.mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+            this.mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
             // Check if we were successful in obtaining the map.
-            if (mMap != null) {
+            if (this.mMap != null) {
                 setUp();
             }
         }
@@ -184,15 +184,15 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         boolean isCreated = createFragmentIfNeeded();
         if (isCreated) {
             // The fragment doesn't exist, we download the data
-            downloadParkings(this.getString(R.string.default_location));
+            this.downloadParkings(this.getString(R.string.default_location));
         } else {
             // The fragment already exists
-            QueryResponse response = mapsFragment.getResponse();
+            QueryResponse response = this.mapsFragment.getResponse();
             this.displayMarkers(response);
-            this.selectedMarkerIndex = mapsFragment.getSelectedMarkerIndex();
+            this.selectedMarkerIndex = this.mapsFragment.getSelectedMarkerIndex();
             if (this.selectedMarkerIndex != -1) {
-                this.updateNavigationButton(selectedMarkerIndex);
-                this.updateSlidingView(selectedMarkerIndex);
+                this.updateNavigationButton(this.selectedMarkerIndex);
+                this.updateSlidingView(this.selectedMarkerIndex);
             }
         }
     }
@@ -205,13 +205,13 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     public boolean createFragmentIfNeeded() {
         // find the retained fragment on activity restarts
         FragmentManager fm = getFragmentManager();
-        mapsFragment = (MapsFragment) fm.findFragmentByTag(getString(R.string.fragment_data_id));
+        this.mapsFragment = (MapsFragment) fm.findFragmentByTag(getString(R.string.fragment_data_id));
 
         // create the fragment and data the first time
-        if (mapsFragment == null) {
+        if (this.mapsFragment == null) {
             // add the fragment
-            mapsFragment = new MapsFragment();
-            fm.beginTransaction().add(mapsFragment, getString(R.string.fragment_data_id)).commit();
+            this.mapsFragment = new MapsFragment();
+            fm.beginTransaction().add(this.mapsFragment, getString(R.string.fragment_data_id)).commit();
             return true;
         }
         return false;
@@ -227,7 +227,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         DownloadParkingTask task = new DownloadParkingTask(listener, this);
         try {
             String encodedParams = URLEncoder.encode(params, "UTF-8");
-            URL url = new URL(WEB_SERVICE_URL + getString(R.string.query_params_id) + encodedParams);
+            URL url = new URL(this.WEB_SERVICE_URL + getString(R.string.query_params_id) + encodedParams);
             task.execute(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -245,7 +245,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         // Check if the download has worked
         if (response != null) {
             // load the data from the web into the fragment
-            mapsFragment.setResponse(response);
+            this.mapsFragment.setResponse(response);
             displayMarkers(response);
         } else if (this.retry < MAX_RETRIES) {
             downloadParkings(this.searchView.getQuery().toString());
@@ -266,20 +266,20 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             Parking parking = response.getParkings().get(i);
             LatLng coords = new LatLng(parking.getCoords().getLat(), parking.getCoords().getLng());
             BitmapDescriptor bitmap = getMarkerIcon(parking);
-            Marker marker = mMap.addMarker(
+            Marker marker = this.mMap.addMarker(
                     new MarkerOptions().position(coords).title(parking.getTitle()).icon(bitmap));
             this.markerToParkingIndex.put(marker, i);
         }
 
         // Create user marker
         LatLng userCoords = new LatLng(response.getCoords().getLat(), response.getCoords().getLng());
-        mMap.addMarker(new MarkerOptions().position(userCoords)
+        this.mMap.addMarker(new MarkerOptions().position(userCoords)
                 .title(getString(R.string.marker_title_you))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.car_marker)));
         
         // Move the camera to the user point
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoords, 15));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoords, 15));
+        this.mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
     }
 
     /**
@@ -316,11 +316,11 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     public boolean onMarkerClick(Marker marker) {
         // Check if the a parking is clicked
         if (!marker.getTitle().equals(getString(R.string.marker_title_you))) {
-            int index = markerToParkingIndex.get(marker);
+            int index = this.markerToParkingIndex.get(marker);
 
             // Save the index in Fragment if the Activity is destroyed
             this.selectedMarkerIndex = index;
-            mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
+            this.mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
 
             this.updateNavigationButton(index);
             this.updateSlidingView(index);
@@ -341,9 +341,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         this.slidingUpPanel.showPanel();
 
         // Set data on panel
-        QueryResponse response = mapsFragment.getResponse();
+        QueryResponse response = this.mapsFragment.getResponse();
         Parking parking = response.getParkings().get(index);
-        parkingDetailsController.displayParkingInfos(parking);
+        this.parkingDetailsController.displayParkingInfos(parking);
     }
 
     private void updateNavigationButton(int index) {
@@ -355,7 +355,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         int paddingTop = this.searchView.getMeasuredHeight() + 10;
         this.mMap.setPadding(0, paddingTop, 0, 110);
 
-        QueryResponse response = mapsFragment.getResponse();
+        QueryResponse response = this.mapsFragment.getResponse();
         Parking parking = response.getParkings().get(index);
 
         // Create navigation intent on click
@@ -376,7 +376,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         // Remove focus (hide keyboard)
         this.searchView.clearFocus();
         // Clear the google maps
-        resetMap();
+        this.resetMap();
         // Download new data from query
         this.downloadParkings(query);
         return true;
