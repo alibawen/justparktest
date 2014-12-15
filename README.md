@@ -1,13 +1,13 @@
 FindPark
 ========
 
-![Demo](screenshots/main_view.png =150x)
-![Demo](screenshots/marker_selected.png =150x)
-![Demo](screenshots/navigation_selected.png =150x)
-![Demo](screenshots/navigation_intent.png =150x)
-![Demo](screenshots/sliding_anchor.png =150x)
-![Demo](screenshots/sliding_extended.png =150x)
-![Demo](screenshots/search.png =150x)
+![Demo](screenshots/main_view.png)
+![Demo](screenshots/marker_selected.png)
+![Demo](screenshots/navigation_selected.png)
+![Demo](screenshots/navigation_intent.png)
+![Demo](screenshots/sliding_anchor.png)
+![Demo](screenshots/sliding_extended.png)
+![Demo](screenshots/search.png)
 
 Features
 ========
