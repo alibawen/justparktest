@@ -25,11 +25,18 @@ public class NavigationIntent implements FloatingActionButton.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        String params =
-                "?saddr=" + current.latitude + "," + current.longitude +
-                "&daddr=" + target.latitude + "," + target.longitude;
+        // Create URL
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(this.context.getString(R.string.intent_scheme))
+               .authority(this.context.getString(R.string.intent_authority))
+               .appendPath(this.context.getString(R.string.maps))
+               .appendQueryParameter(this.context.getString(R.string.saddr),
+                       this.current.latitude + "," + this.current.longitude)
+               .appendQueryParameter(this.context.getString(R.string.daddr),
+                       this.target.latitude + "," + this.target.longitude);
+
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse(context.getString(R.string.google_maps_intent) + params));
+                Uri.parse(builder.build().toString()));
         this.context.startActivity(intent);
     }
 }

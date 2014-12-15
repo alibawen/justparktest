@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.io.InputStream;
@@ -23,6 +24,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        this.imageView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -45,7 +47,8 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected void onPostExecute(Bitmap result) {
         // Set the bitmap into ImageView
-        imageView.setImageBitmap(result);
+        this.imageView.setImageBitmap(result);
+        this.imageView.setVisibility(View.VISIBLE);
     }
 
     public Bitmap getResizedHeight(Bitmap bm, int newHeight) {

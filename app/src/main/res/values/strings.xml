@@ -4,7 +4,6 @@
     <string name="app_name">FindPark</string>
     <string name="title_activity_maps">FindPark</string>
     <string name="downloading_resource">Downloading resources…</string>
-    <string name="data_root_url">https://api.parkatmyhouse.com</string>
     <string name="location_endpoint">/1.1/location/</string>
     <string name="facilities_label">Facilities</string>
     <string name="period_separator">/</string>
@@ -18,7 +17,20 @@
     <string name="query_params_id">\?q=</string>
     <string name="default_location">wembley</string>
     <string name="marker_title_you">You</string>
-    <string name="google_maps_intent">http://maps.google.com/maps</string>
     <string name="rating_text">(0)</string>
+
+    <!-- JustPark API -->
+    <string name="scheme">https</string>
+    <string name="authority">api.parkatmyhouse.com</string>
+    <string name="api_version">1.1</string>
+    <string name="location">location</string>
+    <string name="param_q">q</string>
+
+    <!-- Google Maps intent -->
+    <string name="intent_scheme">http</string>
+    <string name="intent_authority">maps.google.com</string>
+    <string name="maps">maps</string>
+    <string name="saddr">saddr</string>
+    <string name="daddr">daddr</string>
 
 </resources>

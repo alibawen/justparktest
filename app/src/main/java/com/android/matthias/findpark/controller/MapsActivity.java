@@ -2,6 +2,7 @@ package com.android.matthias.findpark.controller;
 
 import android.app.FragmentManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -37,6 +38,14 @@ import java.util.Map;
 
 import connection.InternetChecker;
 
+/**
+ * Main Activity
+ *
+ * Display the Google Maps
+ * Download data
+ * Store data into Fragment
+ * Display parking spaces
+ */
 public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarkerClickListener, SearchView.OnQueryTextListener {
 
     public static float ANCHOR_POINT_PORTRAIT_PX; // in px, stops before showing pictures panel
@@ -44,7 +53,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private SearchView searchView;
     private ParkingDetailsController parkingDetailsController;
-    private String WEB_SERVICE_URL;
+    private Uri.Builder wsBuilder;
     private Map<Marker, Integer> markerToParkingIndex;
     private MapsFragment mapsFragment;
     private int selectedMarkerIndex = -1;
@@ -59,12 +68,17 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (InternetChecker.isNetworkAvailable(this)) {
-            this.WEB_SERVICE_URL = getString(R.string.data_root_url) + getString(R.string.location_endpoint);
+            // Create web service URL
+            this.wsBuilder = new Uri.Builder();
+            this.wsBuilder.scheme(this.getString(R.string.scheme))
+                    .authority(this.getString(R.string.authority))
+                    .appendPath(this.getString(R.string.api_version))
+                    .appendPath(this.getString(R.string.location));
             this.markerToParkingIndex = new HashMap<>();
             this.setContentView(R.layout.activity_maps);
 
             // Set searchView
-            this.searchView = (SearchView) findViewById(R.id.searchView);
+            this.searchView = (SearchView) this.findViewById(R.id.searchView);
             this.searchView.setOnQueryTextListener(this);
             // Set default value in search query
             this.searchView.setQuery(this.getString(R.string.default_location), false);
@@ -147,7 +161,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (this.mMap != null) {
-                setUp();
+                this.setUp();
             }
         }
     }
@@ -184,7 +198,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         boolean isCreated = createFragmentIfNeeded();
         if (isCreated) {
             // The fragment doesn't exist, we download the data
-            this.downloadParkings(this.getString(R.string.default_location));
+            this.downloadParkingSpaces(this.getString(R.string.default_location));
         } else {
             // The fragment already exists
             QueryResponse response = this.mapsFragment.getResponse();
@@ -221,13 +235,14 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      * Download file from webservice asynchronously
      * Calls onDownloadFinished when finished
      */
-    private void downloadParkings(String params) {
+    private void downloadParkingSpaces(String params) {
         // Download
         DownloadParkingListener listener = new DownloadParkingListener(this);
         DownloadParkingTask task = new DownloadParkingTask(listener, this);
         try {
             String encodedParams = URLEncoder.encode(params, "UTF-8");
-            URL url = new URL(this.WEB_SERVICE_URL + getString(R.string.query_params_id) + encodedParams);
+            this.wsBuilder.appendQueryParameter(this.getString(R.string.param_q), encodedParams);
+            URL url = new URL(this.wsBuilder.build().toString());
             task.execute(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -248,7 +263,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             this.mapsFragment.setResponse(response);
             displayMarkers(response);
         } else if (this.retry < MAX_RETRIES) {
-            downloadParkings(this.searchView.getQuery().toString());
+            downloadParkingSpaces(this.searchView.getQuery().toString());
             this.retry++;
         } else {
             Toast.makeText(this, getString(R.string.server_unreachable), Toast.LENGTH_LONG).show();
@@ -378,7 +393,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         // Clear the google maps
         this.resetMap();
         // Download new data from query
-        this.downloadParkings(query);
+        this.downloadParkingSpaces(query);
         return true;
     }
 

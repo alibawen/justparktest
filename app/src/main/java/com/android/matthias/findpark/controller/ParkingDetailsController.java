@@ -2,6 +2,8 @@ package com.android.matthias.findpark.controller;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -110,7 +112,6 @@ public class ParkingDetailsController {
         if(parking.getCategory() != null) {
             this.category.setText(parking.getCategory().toString());
         }
-        // TODO: Reset photo
 
         // Download photo
         downloadPhoto(parking);
@@ -134,14 +135,21 @@ public class ParkingDetailsController {
      */
     private void downloadPhoto(Parking parking) {
         DownloadImageTask downloadImageTask = new DownloadImageTask(photoView);
-        String photoUrl;
+
+        // Create URL
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(this.context.getString(R.string.scheme))
+               .authority(this.context.getString(R.string.authority));
+        String photoURL;
+
         if (parking.getPhotos().getUserAdded() != null &&
             parking.getPhotos().getUserAdded().getNormal() != null ) {
-            photoUrl = context.getString(R.string.data_root_url)
-                    + parking.getPhotos().getUserAdded().getNormal().getUrl();
+            photoURL = builder.build().toString() + parking.getPhotos().getUserAdded().getNormal().getUrl();
         } else {
-            photoUrl = parking.getPhotos().getGoogleStreetview();
+            photoURL = parking.getPhotos().getGoogleStreetview();
         }
-        downloadImageTask.execute(photoUrl);
+        if (photoURL != null) {
+            downloadImageTask.execute(photoURL);
+        }
     }
 }
