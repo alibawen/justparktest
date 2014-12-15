@@ -397,6 +397,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         fab.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Reset the sliding panel content
+     */
     private void resetSlidingPanelInfo() {
         this.slidingUpPanel.setSlidingEnabled(false);
         TextView title = (TextView) this.findViewById(R.id.title);
