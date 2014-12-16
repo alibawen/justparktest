@@ -32,5 +32,6 @@
     <string name="maps">maps</string>
     <string name="saddr">saddr</string>
     <string name="daddr">daddr</string>
+    <string name="google_maps_not_available">Sorry, Google Maps is not available!</string>
 
 </resources>

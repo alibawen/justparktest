@@ -32,6 +32,10 @@ public final class DeviceDisplay {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int screenHeight = displayMetrics.heightPixels;
         int statusBarHeight = getStatusBarHeight(context);
-        return (heightPixels + statusBarHeight) / (screenHeight - statusBarHeight);
+        if ((screenHeight - statusBarHeight) != 0) {
+            return (heightPixels + statusBarHeight) / (screenHeight - statusBarHeight);
+        } else {
+            return 0;
+        }
     }
 }

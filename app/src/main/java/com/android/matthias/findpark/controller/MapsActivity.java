@@ -164,6 +164,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
             // Check if we were successful in obtaining the map.
             if (this.mMap != null) {
                 this.setUp();
+            } else {
+                Toast.makeText(this, getString(R.string.google_maps_not_available),Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -224,7 +226,7 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
         this.mapsFragment = (MapsFragment) fm.findFragmentByTag(getString(R.string.fragment_data_id));
 
         // create the fragment and data the first time
-        if (this.mapsFragment == null) {
+        if (this.mapsFragment == null || this.mapsFragment.getResponse() == null) {
             // add the fragment
             this.mapsFragment = new MapsFragment();
             fm.beginTransaction().add(this.mapsFragment, getString(R.string.fragment_data_id)).commit();
