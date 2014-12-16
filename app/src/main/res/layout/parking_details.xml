@@ -207,12 +207,25 @@
                 android:id="@+id/picture_label"
                 android:textColor="@color/material_deep_teal_500"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/photo_placeholder"
-                android:layout_gravity="top|center_horizontal"
-                android:id="@+id/photo"/>
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <ProgressBar
+                    style="@android:style/Widget.Holo.Light.ProgressBar.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center_horizontal"
+                    android:id="@+id/progressBar" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/photo_placeholder"
+                    android:layout_gravity="top|center_horizontal"
+                    android:id="@+id/photo"/>
+            </FrameLayout>
+
         </LinearLayout>
     </ScrollView>
 
