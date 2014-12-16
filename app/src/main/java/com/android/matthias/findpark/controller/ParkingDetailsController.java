@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.matthias.findpark.R;
 import com.android.matthias.findpark.model.Facility;
@@ -17,6 +19,8 @@ import com.android.matthias.findpark.webservice.DownloadImageTask;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import connection.InternetChecker;
 
 /**
  * Created by Matthias on 07/12/2014.
@@ -117,7 +121,12 @@ public class ParkingDetailsController {
         }
 
         // Download photo
-        this.downloadPhoto(parking);
+        if (InternetChecker.isNetworkAvailable(context)) {
+            this.downloadPhoto(parking);
+        } else {
+            this.photoView.setVisibility(View.INVISIBLE);
+            Toast.makeText(context, context.getString(R.string.active_connection_required), Toast.LENGTH_LONG).show();
+        }
 
         // Set default image (remove transparency) on active facilities.
         this.resetFacilities();

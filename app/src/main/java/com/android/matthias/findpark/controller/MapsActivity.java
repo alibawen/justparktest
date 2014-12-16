@@ -123,7 +123,9 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     public void onDestroy() {
         super.onDestroy();
         // store the data in the fragment
-        this.mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
+        if (this.mapsFragment != null) {
+            this.mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
+        }
     }
 
     /**
