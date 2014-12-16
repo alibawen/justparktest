@@ -44,14 +44,20 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return getResizedHeight(bitmap, BITMAP_HEIGHT);
+        if (bitmap != null) {
+            return this.getResizedHeight(bitmap, BITMAP_HEIGHT);
+        } else {
+            return null;
+        }
     }
 
     @Override
     protected void onPostExecute(Bitmap result) {
-        // Set the bitmap into ImageView
-        this.imageView.setImageBitmap(result);
-        this.imageView.setVisibility(View.VISIBLE);
+        if (result != null) {
+            // Set the bitmap into ImageView
+            this.imageView.setImageBitmap(result);
+            this.imageView.setVisibility(View.VISIBLE);
+        }
         this.loadingView.setVisibility(View.INVISIBLE);
     }
 
@@ -59,20 +65,28 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         int width = bm.getWidth();
         int height = bm.getHeight();
 
-        float ratio = (float) height / newHeight;
-        float newWidth = (float) width / ratio;
+        if (newHeight != 0 || height != 0) {
+            float ratio = (float) height / newHeight;
+            float newWidth = (float) width / ratio;
 
-        return getResizedBitmap(bm, newHeight, (int) newWidth);
+            return this.getResizedBitmap(bm, newHeight, (int) newWidth);
+        } else {
+            return null;
+        }
     }
     public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
 
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
+        if (newWidth != 0 || width != 0) {
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
 
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+            Matrix matrix = new Matrix();
+            matrix.postScale(scaleWidth, scaleHeight);
+            return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        } else {
+            return null;
+        }
     }
 }
