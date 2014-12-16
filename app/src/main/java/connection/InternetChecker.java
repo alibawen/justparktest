@@ -13,9 +13,6 @@ import java.net.URL;
  * Created by Matthias on 24/11/2014.
  */
 public final class InternetChecker {
-
-    public static final String HTTP_WWW_GOOGLE_COM = "http://www.google.com";
-
     private InternetChecker() {}
 
     public static boolean isNetworkAvailable(Context context) {
