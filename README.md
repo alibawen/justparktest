@@ -5,7 +5,7 @@ FindPark
 
 APK
 ===
-Generated .apk available [here](JustPark.apk).
+Generated .apk available [here](https://github.com/matthiaslao/justparktest/raw/master/FindPark.apk).
 
 Features
 ========
