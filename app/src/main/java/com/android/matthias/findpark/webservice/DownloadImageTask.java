@@ -14,17 +14,20 @@ import java.io.InputStream;
  */
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
-    public static final int BITMAP_HEIGHT = 300; // in pixels
-    public ImageView imageView;
+    private static final int BITMAP_HEIGHT = 300; // in pixels
+    private ImageView imageView;
+    private View loadingView;
 
-    public DownloadImageTask(ImageView imageView) {
+    public DownloadImageTask(ImageView imageView, View loadingView) {
         this.imageView = imageView;
+        this.loadingView = loadingView;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         this.imageView.setVisibility(View.INVISIBLE);
+        this.loadingView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -49,6 +52,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         // Set the bitmap into ImageView
         this.imageView.setImageBitmap(result);
         this.imageView.setVisibility(View.VISIBLE);
+        this.loadingView.setVisibility(View.INVISIBLE);
     }
 
     public Bitmap getResizedHeight(Bitmap bm, int newHeight) {

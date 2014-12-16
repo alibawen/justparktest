@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class ParkingDetailsController {
     private TextView priceView;
     private TextView periodView;
     private ImageView photoView;
+    private ProgressBar spinner;
 
     // Facilities
     private static final Map<Facility, FacilityResource> facilityMap;
@@ -58,6 +60,7 @@ public class ParkingDetailsController {
         this.priceView = (TextView) context.findViewById(R.id.price);
         this.periodView = (TextView) context.findViewById(R.id.period);
         this.photoView = (ImageView) context.findViewById(R.id.photo);
+        this.spinner = (ProgressBar) context.findViewById(R.id.spinner);
 
         // Facilities
         resetFacilities();
@@ -114,14 +117,14 @@ public class ParkingDetailsController {
         }
 
         // Download photo
-        downloadPhoto(parking);
+        this.downloadPhoto(parking);
 
         // Set default image (remove transparency) on active facilities.
-        resetFacilities();
+        this.resetFacilities();
         for(Facility facility : parking.getFacilities()) {
             FacilityResource resource = facilityMap.get(facility);
             if (resource != null) {
-                Drawable drawable = context.getResources().getDrawable(resource.getDrawableId());
+                Drawable drawable = this.context.getResources().getDrawable(resource.getDrawableId());
                 // Enable
                 drawable.setAlpha(255);
                 resource.getImageView().setImageDrawable(drawable);
@@ -134,7 +137,7 @@ public class ParkingDetailsController {
      * @param parking the parking
      */
     private void downloadPhoto(Parking parking) {
-        DownloadImageTask downloadImageTask = new DownloadImageTask(photoView);
+        DownloadImageTask downloadImageTask = new DownloadImageTask(this.photoView, this.spinner);
 
         // Create URL
         Uri.Builder builder = new Uri.Builder();
