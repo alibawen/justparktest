@@ -22,26 +22,7 @@ public final class InternetChecker {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
-    }
-
-    private static boolean hasActiveInternetConnection(Context context) {
-        if (isNetworkAvailable(context)) {
-            try {
-                HttpURLConnection urlc
-                        = (HttpURLConnection) (new URL(HTTP_WWW_GOOGLE_COM).openConnection());
-                urlc.setRequestProperty("User-Agent", "Test");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(1500);
-                urlc.connect();
-                return (urlc.getResponseCode() == 200);
-            } catch (IOException e) {
-                Log.e("INTERNET", "Error checking internet connection", e);
-            }
-        } else {
-            Log.d("INTERNET", "No network available!");
-        }
-        return false;
+        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
     }
 
 }
