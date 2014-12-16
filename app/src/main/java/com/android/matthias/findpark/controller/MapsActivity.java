@@ -58,6 +58,8 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
     private MapsFragment mapsFragment;
     private int selectedMarkerIndex = -1;
 
+    private String lastMarkerId = null;
+
     private SlidingUpPanelLayout slidingUpPanel;
 
     // Connection attempts
@@ -329,20 +331,23 @@ public class MapsActivity extends ActionBarActivity implements GoogleMap.OnMarke
      */
     @Override
     public boolean onMarkerClick(Marker marker) {
-        // Check if the a parking is clicked
-        if (!marker.getTitle().equals(getString(R.string.marker_title_you))) {
-            int index = this.markerToParkingIndex.get(marker);
+        // Ignore multiple clicks on the same marker
+        if (this.lastMarkerId == null || !this.lastMarkerId.equals(marker.getId())) {
+            // Check if the a parking is clicked (not current position marker)
+            if (!marker.getTitle().equals(getString(R.string.marker_title_you))) {
+                this.lastMarkerId = marker.getId();
+                int index = this.markerToParkingIndex.get(marker);
 
-            // Save the index in Fragment if the Activity is destroyed
-            this.selectedMarkerIndex = index;
-            this.mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
+                // Save the index in Fragment if the Activity is destroyed
+                this.selectedMarkerIndex = index;
+                this.mapsFragment.setSelectedMarkerIndex(this.selectedMarkerIndex);
 
-            this.updateNavigationButton(index);
-            this.updateSlidingView(index);
-            return false; // false: Let the default behaviour occur on the map (info, center)
-        } else {
-            return true; // Do nothing
+                this.updateNavigationButton(index);
+                this.updateSlidingView(index);
+                return false; // false: Let the default behaviour occur on the map (info, center)
+            }
         }
+        return true; // Do nothing
     }
 
     /**
