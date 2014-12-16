@@ -3,6 +3,10 @@ FindPark
 
 ![Screenshots](screenshots/screenshots.png)
 
+APK
+===
+Generated .apk available [here](JustPark.apk).
+
 Features
 ========
 * Display nearest private parking spaces according to the given location
@@ -44,6 +48,9 @@ Code
 * The main data is stored into a Fragment to prevent data loss resulting from the main Activity changes (screen lock, orientation, language, ...)
 * An external application (Google Maps) is called to handle navigation.
 
-What is missing
-===============
-Probably unit tests.
+What is missing/Known issues
+============================
+* Unit tests.
+* Images missing for all screen resolutions
+* Retry button if no connection available
+* Rating bar images for all resolutions (cropped on some devices)
