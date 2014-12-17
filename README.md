@@ -48,9 +48,10 @@ Code
 * The main data is stored into a Fragment to prevent data loss resulting from the main Activity changes (screen lock, orientation, language, ...)
 * An external application (Google Maps) is called to handle navigation.
 
-What is missing/Known issues
+To do / Known issues
 ============================
 * Unit tests.
 * Images missing for all screen resolutions
 * Retry button if no connection available
+* Add a line between car marker and parking space marker on marker click
 * Rating bar images for all resolutions (cropped on some devices)
